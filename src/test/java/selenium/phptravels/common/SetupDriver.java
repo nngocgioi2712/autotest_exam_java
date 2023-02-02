@@ -5,13 +5,14 @@ import java.util.Locale;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 public class SetupDriver {
   protected WebDriver driver;
-
+  protected WebDriverWait wait;
   public void setDriver(String browser) {
     switch (browser.toLowerCase(Locale.ROOT)) {
       case "chrome":
@@ -47,12 +48,11 @@ public class SetupDriver {
   public void setUp(ITestContext context) {
     setDriver("chrome");
     context.setAttribute("WebDriver", driver);
-    //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    wait = new WebDriverWait(driver, 10);
   }
 
   @AfterMethod
   public void tearDown() {
-    //driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-    //driver.quit();
+    driver.quit();
   }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite 1" thread-count="2" parallel="tests">
+  <parameter name="email" value="gioi@phptravels.com"></parameter>
+  <parameter name="password" value="demouser"></parameter>
+  <parameter name="username" value="gioi"></parameter>
+  <test name="Login test">
+    <classes>
+      <class name="selenium.phptravels.testcases.Login">
+      </class>
+    </classes>
+  </test>
+  </suite>
