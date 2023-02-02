@@ -20,6 +20,7 @@ public class DashboardPage {
   public boolean verifyLoginSuccess(String username){
     wait.until(ExpectedConditions.visibilityOf(txt_hiUser));
     System.out.println(txt_hiUser.getText());
-    return txt_hiUser.getText().equals("Hi, " + username.substring(0, 1).toUpperCase(Locale.ROOT) + username.substring(1) + " Welcome Back");
+    return txt_hiUser.getText().equals("Hi, " + username.substring(0, 1).toUpperCase(Locale.ROOT)
+            + username.substring(1) + " Welcome Back");
   }
 }

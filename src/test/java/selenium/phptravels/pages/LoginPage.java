@@ -1,11 +1,9 @@
 package selenium.phptravels.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,7 +18,7 @@ public class LoginPage {
   @FindBy(xpath = "//label[@for = 'rememberchb']")
   private WebElement chb_remember;
   @FindBy(xpath = "//input[@id = 'rememberchb']")
-  private WebElement chb_remember_in;
+  private WebElement in_chb_remember;
   public LoginPage(WebDriver driver, WebDriverWait wait){
     this.wait = wait;
     PageFactory.initElements(driver, this);
@@ -41,6 +39,6 @@ public class LoginPage {
     chb_remember.click();
   }
   public boolean verifyRememberChecked(){
-    return chb_remember_in.isSelected();
+    return in_chb_remember.isSelected();
   }
 }
