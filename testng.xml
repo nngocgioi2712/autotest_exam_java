@@ -10,4 +10,10 @@
       </class>
     </classes>
   </test>
-  </suite>
+  <test name="DateTime test">
+    <classes>
+      <class name="test.datetime.DateHandleTest">
+      </class>
+    </classes>
+  </test>
+</suite>
