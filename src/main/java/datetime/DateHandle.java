@@ -1,68 +1,78 @@
 package datetime;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.Calendar;
-import java.util.Date;
 import org.apache.commons.lang3.time.DateUtils;
 
-public class DateHandle {
-  public static long dateDiff(String startDate, String closeDate){
-    DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-    Date date1, date2;
-    try {
-      date1 = simpleDateFormat.parse(startDate);
-      date2 = simpleDateFormat.parse(closeDate);
-      long diff = date2.getTime() - date1.getTime();
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
-      //24h/day; 60min/hour; 60 seconds/min; 1000 milliseconds/second
-      long days = diff/ (24 * 60 * 60 * 1000);
-      return days;
+public class DateHandle {
+  private static DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+  private static final long ONE_DAY_IN_MILLISECOND = 24 * 60 * 60 * 1000;
+
+  /*
+  * Calculate the total number of days from start date to close date
+  * */
+  public static long getDateDiff(String startDateStr, String closeDateStr){
+    Date startDate, closeDate;
+    long diffInMillis, diffInDay;
+    try {
+      startDate = simpleDateFormat.parse(startDateStr);
+      closeDate = simpleDateFormat.parse(closeDateStr);
+      diffInMillis = closeDate.getTime() - startDate.getTime();
+      diffInDay = diffInMillis/ ONE_DAY_IN_MILLISECOND;
+      return diffInDay;
     } catch(Exception e){
       System.out.println(e.getMessage());
       return 0;
     }
   }
-  public static String getCloseDate(String startDate, int months){
-    DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-    Date date1, date2;
-    int days = 28+31;
-    long daysInMillis;
-    try{
-      date1 = simpleDateFormat.parse(startDate);
-      daysInMillis = (long)days * (24 * 60 * 60 * 1000);
-      date2 = new Date(date1.getTime() + daysInMillis);
-      return simpleDateFormat.format(date2);
-    }catch (Exception e){
-      System.out.println(e.getMessage());
-      return "";
-    }
+
+  public static String getFirstDayOfMonth(Date date){
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+    cal.set(Calendar.DATE, 1);
+    return simpleDateFormat.format(cal.getTime());
   }
-  public static String getCloseDate1(String startDate, int months){
-    DateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-    Date date1, date2;
-    Calendar calendarDate1 = Calendar.getInstance();
-    Calendar calendarDate2 = Calendar.getInstance();
+
+  /*
+   * Return the closeDate when adding months to the startDate
+   * */
+  public static String getCloseDateAddMonths(String startDateStr, int months){
+    Date startDate, dayOfNextStartMonth, dayOfNextEndMonth, closeDate;
+    String firstDayOfNextStartMonthStr, firstDayOfNextEndMonthStr;
+    long diffInDay;
+    long diffInMillis;
     try{
-      System.out.println(calendarDate1.get(Calendar.YEAR));
-      date1 = simpleDateFormat.parse(startDate);
-      calendarDate1.setTime(date1);
-      date2 = DateUtils.addMonths(date1, months);
-      calendarDate2.setTime(date2);
+      startDate = simpleDateFormat.parse(startDateStr);
 
+      //get the next month of the start date
+      dayOfNextStartMonth = DateUtils.addMonths(startDate, 1);
+      firstDayOfNextStartMonthStr = getFirstDayOfMonth(dayOfNextStartMonth);
 
-      YearMonth yearMonth = YearMonth.of(calendarDate2.get(Calendar.YEAR),  calendarDate2.get(Calendar.MONTH));
-      int daysInLastMonth = yearMonth.lengthOfMonth();
-      return simpleDateFormat.format(date2);
+      //get the next month of the close date
+      dayOfNextEndMonth = DateUtils.addMonths(startDate, months + 1);
+      firstDayOfNextEndMonthStr = getFirstDayOfMonth(dayOfNextEndMonth);
+
+      //calculate the days of the following months and add them to the start date
+      diffInDay = getDateDiff(firstDayOfNextStartMonthStr, firstDayOfNextEndMonthStr);
+      diffInMillis = diffInDay * ONE_DAY_IN_MILLISECOND;
+      closeDate = new Date(startDate.getTime() + diffInMillis);
+
+      return simpleDateFormat.format(closeDate);
     }catch (Exception e){
       System.out.println(e.getMessage());
       return "";
     }
   }
   public static void main(String[] args){
-    System.out.println(dateDiff("20170220", "20211224"));
-    System.out.println(getCloseDate1("20171230", 2));
+    String startDate = "19991230";
+    String closeDate = "20000330";
+    int monthsPlus = 2;
+    System.out.println("Tong so ngay tu " + startDate + " den " + closeDate + ": "
+            + getDateDiff(startDate, closeDate));
+    System.out.println(startDate + " + " + monthsPlus + " month(s) = "
+            + getCloseDateAddMonths(startDate, monthsPlus));
   }
 }
