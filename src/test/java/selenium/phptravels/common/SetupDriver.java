@@ -34,19 +34,24 @@ public class SetupDriver {
   }
 
   public WebDriver initChromeDriver() {
-    WebDriverManager.chromedriver().setup();
+    //WebDriverManager.chromedriver().setup();
+    System.setProperty("webdriver.chrome.driver", "C:\\tools\\Katalon_Studio_Windows_64-8.5.2\\configuration\\resources\\drivers\\chromedriver_win32\\chromedriver.exe");
     return new ChromeDriver();
   }
 
   public WebDriver initFireFoxDriver() {
-    WebDriverManager.firefoxdriver().setup();
+    //WebDriverManager.firefoxdriver().setup();
+    System.setProperty("webdriver.gecko.driver", "C:\\Users\\admin\\Downloads\\geckodriver.exe");
     return new FirefoxDriver();
   }
 
-  @BeforeMethod
-  public void setUp(ITestContext context) {
+  //@BeforeMethod
+  public void setUp() {
     setDriver("chrome");
-    context.setAttribute("WebDriver", driver);
+    wait = new WebDriverWait(driver, 10);
+  }
+  public void setUp(String driverName) {
+    setDriver(driverName);
     wait = new WebDriverWait(driver, 10);
   }
 
